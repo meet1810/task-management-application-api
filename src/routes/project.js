@@ -1,13 +1,23 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { validateProject, validateUpdateProject, handleValidationErrors } = require('../vallidation/project');
+const {
+  validateProject,
+  validateUpdateProject,
+  handleValidationErrors,
+} = require("../vallidation/project");
 
-const { projectController: pc } = require('../controllers/project');
+const { projectController: pc } = require("../controllers/project");
 
-router.post('/projects', validateProject, handleValidationErrors, pc.add);
-router.get('/projects', pc.list);
-router.get('/projects/:id', pc.view);
-router.put('/projects/:id', validateUpdateProject, handleValidationErrors,pc.update);
-router.delete('/projects/:id', pc.remove);
+router.post("/projects", validateProject, handleValidationErrors, pc.add);
+router.get("/projects", pc.list);
+router.get("/projects/:id", pc.view);
+router.put(
+  "/projects/:id",
+  validateUpdateProject,
+  handleValidationErrors,
+  pc.update
+);
+router.delete("/projects/:id", pc.remove);
+router.get("/user-projects/:userId", pc.getUserProjects);
 
 module.exports = router;

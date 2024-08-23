@@ -141,7 +141,6 @@
         }
       }
     },
-
     "/projects": {
       "post": {
         "tags": ["Project"],
@@ -203,13 +202,13 @@
         }
       }
     },
-    "/projects/{projectId}": {
+    "/projects/{id}": {
       "get": {
         "tags": ["Project"],
         "summary": "Get Project by ID",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -228,7 +227,7 @@
         "summary": "Update Project",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -257,7 +256,7 @@
         "summary": "Delete Project",
         "parameters": [
           {
-            "name": "projectId",
+            "name": "id",
             "in": "path",
             "required": true,
             "schema": {
@@ -272,7 +271,27 @@
         }
       }
     },
-
+    "/user-projects/{userId}": {
+      "get": {
+        "tags": ["Project"],
+        "summary": "Get Project by userId",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User Project details"
+          }
+        }
+      }
+    },
     "/tasks": {
       "post": {
         "tags": ["Task"],
@@ -403,10 +422,10 @@
         }
       }
     },
-    "/projects/{projectId}/tasks": {
+    "/projet-tasks/{projectId}": {
       "get": {
         "tags": ["Task"],
-        "summary": "Get All Tasks for a Project",
+        "summary": "Get tasks by projectId",
         "parameters": [
           {
             "name": "projectId",
@@ -415,40 +434,11 @@
             "schema": {
               "type": "integer"
             }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page number for pagination",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 1
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "description": "Number of tasks per page",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "default": 10
-            }
-          },
-          {
-            "name": "search",
-            "in": "query",
-            "description": "Search term to filter tasks",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "List of all tasks for a project"
+            "description": "User Project details"
           }
         }
       }

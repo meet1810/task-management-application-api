@@ -9,5 +9,6 @@ router.get('/tasks', tc.list);
 router.get('/tasks/:id', tc.view);
 router.put('/tasks/:id', validateUpdateTask, handleValidationErrors,tc.update);
 router.delete('/tasks/:id', tc.remove);
+router.get('/projet-tasks/:projectId', tc.getProjectTasks);
 
 module.exports = router;

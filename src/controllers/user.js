@@ -1,5 +1,5 @@
 const users = require('../models/user');
-
+// User add
 const add = (req, res) => {
     try {
         const { name, email } = req.body;
@@ -25,11 +25,10 @@ const add = (req, res) => {
         })
     }
 };
-
+// User list
 const list = (req, res) => {
     try {
         let { page = 1, limit = 10, search = '' } = req.query;
-        console.log("🚀 ~ list ~ search:", search)
         page = parseInt(page);
         limit = parseInt(limit);
 
@@ -67,7 +66,7 @@ const list = (req, res) => {
         })
     }
 };
-
+// User view by id
 const view = (req, res) => {
     try {
         const user = users.find(u => u.id == req.params.id);
@@ -89,7 +88,7 @@ const view = (req, res) => {
         })
     }
 };
-
+// User update
 const update = (req, res) => {
     try {
         const user = users.find(u => u.id == req.params.id);
@@ -126,7 +125,7 @@ const update = (req, res) => {
     }
 
 };
-
+// User delete
 const remove = (req, res) => {
     try {
         const userIndex = users.findIndex(u => u.id == req.params.id);

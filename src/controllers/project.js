@@ -1,6 +1,8 @@
 const projects = require('../models/project');
 const users = require('../models/user');
+const tasks = require('../models/task');
 
+// Project add
 const add = (req, res) => {
     try {
         const { name, description, userId } = req.body;
@@ -29,7 +31,7 @@ const add = (req, res) => {
         });
     }
 };
-
+// Project list
 const list = (req, res) => {
     try {
         let { page = 1, limit = 10, search = '' } = req.query;
@@ -70,9 +72,10 @@ const list = (req, res) => {
         });
     }
 };
-
+// Project view by id
 const view = (req, res) => {
     try {
+        // Find the project by its ID
         const project = projects.find(p => p.id == req.params.id);
         if (!project) {
             return res.status(404).send({
@@ -80,10 +83,21 @@ const view = (req, res) => {
                 message: 'Project not found',
             });
         }
+
+        // Find all tasks related to this project
+        const projectTasks = tasks.filter(task => task.projectId == project.id);
+
+        // Find the user related to this project
+        const user = users.find(u => u.id == project.userId);
+
         return res.status(200).send({
             status: true,
             message: 'Project found successfully',
-            data: project
+            data: {
+                ...project,
+                user: user || null,  // Include user details
+                tasks: projectTasks  // Include tasks related to the project
+            }
         });
     } catch (error) {
         return res.status(422).send({
@@ -92,7 +106,7 @@ const view = (req, res) => {
         });
     }
 };
-
+// Project update
 const update = (req, res) => {
     try {
         const project = projects.find(p => p.id == req.params.id);
@@ -130,7 +144,7 @@ const update = (req, res) => {
         });
     }
 };
-
+// Project delete
 const remove = (req, res) => {
     try {
         const projectIndex = projects.findIndex(p => p.id == req.params.id);
@@ -159,6 +173,32 @@ const remove = (req, res) => {
         });
     }
 };
+// Find all projects of a single user
+const getUserProjects = (req, res) => {
+    try {
+        const userId = req.params.userId;
+
+        const userProjects = projects.filter(project => project.userId == userId);
+
+        if (userProjects.length === 0) {
+            return res.status(202).send({
+                status: false,
+                message: 'No projects found for this user',
+            });
+        }
+
+        return res.status(200).send({
+            status: true,
+            message: 'Projects found successfully',
+            data: userProjects
+        });
+    } catch (error) {
+        return res.status(500).send({
+            status: false,
+            message: 'Error retrieving user projects',
+        });
+    }
+};
 
 
 module.exports.projectController = {
@@ -166,5 +206,6 @@ module.exports.projectController = {
     update,
     add,
     list,
-    view
+    view,
+    getUserProjects
 };

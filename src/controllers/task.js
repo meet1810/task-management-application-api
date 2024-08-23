@@ -1,6 +1,7 @@
 const tasks = require('../models/task');
 const projects = require('../models/project');
 
+// Task add
 const add = (req, res) => {
     try {
         const { title, description, status, projectId } = req.body;
@@ -31,7 +32,7 @@ const add = (req, res) => {
         });
     }
 };
-
+// Task list
 const list = (req, res) => {
     try {
         let { page = 1, limit = 10, search = '' } = req.query;
@@ -72,7 +73,7 @@ const list = (req, res) => {
         });
     }
 };
-
+// Task view by id
 const view = (req, res) => {
     try {
         const task = tasks.find(t => t.id == req.params.id);
@@ -94,7 +95,7 @@ const view = (req, res) => {
         });
     }
 };
-
+// Task update
 const update = (req, res) => {
     try {
         const task = tasks.find(t => t.id == req.params.id);
@@ -133,7 +134,7 @@ const update = (req, res) => {
         });
     }
 };
-
+// Task delete
 const remove = (req, res) => {
     try {
         const userIndex = users.findIndex(u => u.id == req.params.id);
@@ -169,6 +170,42 @@ const remove = (req, res) => {
         });
     }
 };
+// Find all task by projectId
+const getProjectTasks = (req, res) => {
+    try {
+        const projectId = req.params.projectId;
+
+        // Find the project by its ID
+        const project = projects.find(p => p.id == projectId);
+        if (!project) {
+            return res.status(404).send({
+                status: false,
+                message: 'Project not found',
+            });
+        }
+
+        // Find all tasks related to this project
+        const projectTasks = tasks.filter(task => task.projectId == projectId);
+
+        if (projectTasks.length === 0) {
+            return res.status(404).send({
+                status: false,
+                message: 'No tasks found for this project',
+            });
+        }
+
+        return res.status(200).send({
+            status: true,
+            message: 'Tasks found successfully',
+            data: projectTasks
+        });
+    } catch (error) {
+        return res.status(500).send({
+            status: false,
+            message: 'Error retrieving project tasks',
+        });
+    }
+};
 
 
 module.exports.taskController = {
@@ -176,5 +213,6 @@ module.exports.taskController = {
     update,
     add,
     list,
-    view
+    view,
+    getProjectTasks
 };
