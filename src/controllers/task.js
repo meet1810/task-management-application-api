@@ -137,37 +137,24 @@ const update = (req, res) => {
 // Task delete
 const remove = (req, res) => {
     try {
-        const userIndex = users.findIndex(u => u.id == req.params.id);
-        if (userIndex === -1) {
+        const taskIndex = tasks.findIndex(u => u.id == req.params.id);
+        if (taskIndex === -1) {
             return res.status(404).send({
                 status: false,
-                message: 'User not found',
-            });
+                message: 'task not found',
+            })
         }
 
-        const userId = users[userIndex].id;
-
-        const userProjects = projects.filter(project => project.userId === userId);
-        const userProjectIds = userProjects.map(project => project.id);
-        const filteredTasks = tasks.filter(task => !userProjectIds.includes(task.projectId));
-        tasks.length = 0;
-        tasks.push(...filteredTasks);
-
-        const filteredProjects = projects.filter(project => project.userId !== userId);
-        projects.length = 0;
-        projects.push(...filteredProjects);
-
-        users.splice(userIndex, 1);
-
+        tasks.splice(taskIndex, 1);
         return res.status(201).send({
             status: true,
-            message: 'User, associated projects, and tasks deleted successfully',
-        });
+            message: 'task Deleted Successfully',
+        })
     } catch (error) {
         return res.status(422).send({
             status: false,
-            message: 'User Not Deleted',
-        });
+            message: 'task Not Deleted',
+        })
     }
 };
 // Find all task by projectId
